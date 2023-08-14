@@ -3,7 +3,7 @@ import { useRecentBookings } from "./useRecentBookings";
 import Spinner from "../../ui/Spinner";
 import { useRecentStays } from "./useRecentStays";
 import Statistics from "./Statistics";
-import { useCabins } from "../cabins/useCabins";
+import { useRooms } from "../cabins/useRooms";
 import SalesChart from "./SalesChart";
 import DurationChart from "./DurationChart";
 import TodayActivity from "../check-in-out/TodayActivity";
@@ -23,7 +23,7 @@ function DashboardLayout() {
     confirmedStays,
     numDays,
   } = useRecentStays();
-  const { cabins, isLoading: isLoadingCabin } = useCabins();
+  const { rooms, isLoading: isLoadingCabin } = useRooms();
 
   if (isLoadingBookings || isLoadingStays || isLoadingCabin) return <Spinner />;
 
@@ -33,7 +33,7 @@ function DashboardLayout() {
         bookings={bookings}
         confirmedStays={confirmedStays}
         numDays={numDays}
-        cabinLen={cabins.length}
+        cabinLen={rooms.length}
       />
       <TodayActivity />
       <DurationChart confirmedStays={confirmedStays} />

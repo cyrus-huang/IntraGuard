@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
-import { useCabins } from "./useCabins";
+import { useRooms } from "./useRooms";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
@@ -33,42 +33,42 @@ import Empty from "../../ui/Empty";
 // `;
 
 function CabinTable() {
-  const { isLoading, cabins, error } = useCabins();
+  const { isLoading, rooms, error } = useRooms();
   const [searchParams] = useSearchParams();
 
   if (isLoading) return <Spinner />;
-  if (!cabins.length) return <Empty resourceName="cabins" />;
+  if (!rooms.length) return <Empty resourceName="cabins" />;
 
   //filter
-  const filterValue = searchParams.get("discount") || "all";
-  let filterCabins;
-  if (filterValue === "all") filterCabins = cabins;
-  if (filterValue === "no-discount")
-    filterCabins = cabins.filter((cabin) => cabin.discount === 0);
-  if (filterValue === "with-discount")
-    filterCabins = cabins.filter((cabin) => cabin.discount > 0);
+  const filterValue = searchParams.get("overall") || "all";
+  let filterRooms;
+  if (filterValue === "all") filterRooms = rooms;
+  if (filterValue === "not-running")
+    filterRooms = rooms.filter((room) => room.running === false);
+  if (filterValue === "need-repair")
+    filterRooms = rooms.filter((room) => room.overall === false);
 
   //sort
   const sort = searchParams.get("sort") || "start_date-asc";
   const [way, order] = sort.split("-");
   const symbol = order === "asc" ? 1 : -1;
-  const sortedCabins = filterCabins.sort((a, b) => (a[way] - b[way]) * symbol);
+  const sortedRooms = filterRooms.sort((a, b) => (a[way] - b[way]) * symbol);
 
   return (
     <Menus>
-      <Table columns="0.6fr 1.8fr 2.2fr 1fr 1fr 1fr">
+      <Table columns="0.6fr 1.6fr 2.2fr 1.6fr 1fr 0.6fr">
         <Table.Header>
           <div></div>
-          <div>Cabin</div>
-          <div>Capacity</div>
-          <div>Price</div>
-          <div>Discount</div>
+          <div>Room</div>
+          <div>Running</div>
+          <div>Overall</div>
+          <div>Priority</div>
           <div></div>
         </Table.Header>
 
         <Table.Body
-          data={sortedCabins}
-          render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
+          data={sortedRooms}
+          render={(room) => <CabinRow room={room} key={room.id} />}
         />
       </Table>
     </Menus>

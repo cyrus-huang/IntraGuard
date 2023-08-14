@@ -1,7 +1,5 @@
 import styled from "styled-components";
-import { formatCurrency } from "../../utils/helpers";
-import { useState } from "react";
-import CreateCabinForm from "./CreateCabinForm";
+import CreateRoomForm from "./CreateRoomForm";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { FaCopy, FaPen, FaTrash } from "react-icons/fa6";
 import { useCreateCabin } from "./useCreateCabin";
@@ -38,39 +36,51 @@ const Cabin = styled.div`
   font-family: "Sono";
 `;
 
-const Price = styled.div`
-  font-family: "Sono";
-  font-weight: 600;
-`;
+// const Price = styled.div`
+//   font-family: "Sono";
+//   font-weight: 600;
+// `;
 
-const Discount = styled.div`
-  font-family: "Sono";
-  font-weight: 500;
-  color: var(--color-green-700);
-`;
+// const Discount = styled.div`
+//   font-family: "Sono";
+//   font-weight: 500;
+//   color: var(--color-green-700);
+// `;
 
-function CabinRow({ cabin }) {
+function CabinRow({ room }) {
   const {
-    id: cabin_id,
+    id: room_id,
     name,
-    max_capacity,
-    regular_price,
-    discount,
+    air_condition,
+    electricity,
+    fire_control,
+    environment,
+    security,
+    wiring,
+    ups,
+    running,
+    overall,
     image,
-    description,
-  } = cabin;
+    priority,
+  } = room;
 
-  const { isDeleting, deleteCabin } = useDeleteCabin();
-  const { isCreating, createCabin } = useCreateCabin();
+  const { isDeleting, deleteRoom } = useDeleteCabin();
+  const { isCreating, createRoom } = useCreateCabin();
 
   function handleDuplicate() {
-    createCabin({
+    createRoom({
       name: `Copy of ${name}`,
-      max_capacity,
-      regular_price,
-      discount,
+      air_condition,
+      electricity,
+      fire_control,
+      environment,
+      security,
+      wiring,
+      ups,
+      running,
+      overall,
       image,
-      description,
+      priority,
     });
   }
   return (
@@ -78,19 +88,15 @@ function CabinRow({ cabin }) {
       <Table.Row>
         <Img src={image} />
         <Cabin>{name}</Cabin>
-        <div>Fits up to {max_capacity} guests</div>
-        <Price>{formatCurrency(regular_price)}</Price>
-        {discount ? (
-          <Discount>{formatCurrency(discount)}</Discount>
-        ) : (
-          <span>&mdash;</span>
-        )}
+        <div>{running ? "Computers Running" : "Not Running"}</div>
+        <div>{overall ? "Facilities operating" : "Not functioning"}</div>
+        <div>{priority}</div>
         <div>
           <Modal>
             <Menus.Menu>
-              <Menus.Toggle id={cabin_id} />
+              <Menus.Toggle id={room_id} />
 
-              <Menus.List id={cabin_id}>
+              <Menus.List id={room_id}>
                 <Menus.Button
                   icon={<FaCopy />}
                   onClick={handleDuplicate}
@@ -109,14 +115,14 @@ function CabinRow({ cabin }) {
               </Menus.List>
 
               <Modal.Window name="edit">
-                <CreateCabinForm cabinToEdit={cabin} />
+                <CreateRoomForm roomToEdit={room} />
               </Modal.Window>
 
               <Modal.Window name="delete">
                 <ConfirmDelete
                   resourceName="cabins"
                   disabled={isDeleting}
-                  onConfirm={() => deleteCabin(cabin_id)}
+                  onConfirm={() => deleteRoom(room_id)}
                 />
               </Modal.Window>
             </Menus.Menu>
