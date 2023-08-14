@@ -3,9 +3,10 @@ import styled from "styled-components";
 import {
   FaHouseChimney,
   FaRegCalendarCheck,
-  FaHotel,
-  FaUser,
   FaGear,
+  FaBuildingColumns,
+  FaChalkboardUser,
+  FaIdCardClip,
 } from "react-icons/fa6";
 
 const NavList = styled.ul`
@@ -68,13 +69,18 @@ function MainNav() {
             <span>Bookings</span>
           </Link>
 
-          <Link to="/cabins">
-            <FaHotel />
-            <span>Cabins</span>
+          <Link to="/rooms">
+            <FaBuildingColumns />
+            <span>Rooms</span>
+          </Link>
+
+          <Link to="/personnel">
+            <FaIdCardClip />
+            <span>Personnel</span>
           </Link>
 
           <Link to="/users">
-            <FaUser />
+            <FaChalkboardUser />
             <span>Users</span>
           </Link>
 

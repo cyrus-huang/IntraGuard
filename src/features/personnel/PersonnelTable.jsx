@@ -1,10 +1,10 @@
 import Spinner from "../../ui/Spinner";
-import CabinRow from "./CabinRow";
-import { useRooms } from "./useRooms";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import { useSearchParams } from "react-router-dom";
 import Empty from "../../ui/Empty";
+import { usePersonnel } from "./usePersonnel";
+import PersonnelRow from "./PersonnelRow";
 
 // const Table = styled.div`
 //   border: 1px solid var(--color-grey-200);
@@ -30,47 +30,51 @@ import Empty from "../../ui/Empty";
 //   padding: 1.6rem 2.4rem;
 // `;
 
-function CabinTable() {
-  const { isLoading, rooms, error } = useRooms();
+function PersonnelTable() {
+  const { isLoading, personnel, error } = usePersonnel();
   const [searchParams] = useSearchParams();
 
   if (isLoading) return <Spinner />;
-  if (!rooms.length) return <Empty resourceName="rooms" />;
+  if (!personnel.length) return <Empty resourceName="available" />;
 
   //filter
-  const filterValue = searchParams.get("ptype") || "all";
-  let filterRooms;
-  if (filterValue === "all") filterRooms = rooms;
-  if (filterValue === "not-running")
-    filterRooms = rooms.filter((room) => room.running === false);
-  if (filterValue === "need-repair")
-    filterRooms = rooms.filter((room) => room.overall === false);
+  const filterValue = searchParams.get("available") || "all";
+  let filterPersonnel;
+  if (filterValue === "all") filterPersonnel = personnel;
+  if (filterValue === "not-available")
+    filterPersonnel = personnel.filter((person) => person.available === false);
+  if (filterValue === "available")
+    filterPersonnel = personnel.filter((person) => person.available === true);
 
   //sort
   const sort = searchParams.get("sort") || "name-asc";
   const [way, order] = sort.split("-");
   const symbol = order === "asc" ? 1 : -1;
-  const sortedRooms = filterRooms.sort((a, b) => (a[way] - b[way]) * symbol);
+  console.log(filterPersonnel);
+  const sortedPersonnel = filterPersonnel.sort(
+    (a, b) => (a[way].charCodeAt(0) - b[way].charCodeAt(0)) * symbol
+  );
+  console.log(sortedPersonnel);
 
   return (
     <Menus>
       <Table columns="0.6fr 1.6fr 2.2fr 1.6fr 1fr 0.6fr">
         <Table.Header>
           <div></div>
-          <div>Room</div>
-          <div>Running</div>
-          <div>Overall</div>
-          <div>Priority</div>
+          <div>Personnel</div>
+          <div>ID</div>
+          <div>Phone</div>
+          <div>Availablity</div>
           <div></div>
         </Table.Header>
 
         <Table.Body
-          data={sortedRooms}
-          render={(room) => <CabinRow room={room} key={room.id} />}
+          data={sortedPersonnel}
+          render={(person) => <PersonnelRow person={person} key={person.id} />}
         />
       </Table>
     </Menus>
   );
 }
 
-export default CabinTable;
+export default PersonnelTable;

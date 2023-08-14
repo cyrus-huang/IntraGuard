@@ -2,15 +2,15 @@ import TableOperations from "../../ui/TableOperations";
 import Filter from "../../ui/Filter";
 import Sort from "../../ui/Sort";
 
-function CabinTableOperation() {
+function PersonnelTableOperation() {
   return (
     <TableOperations>
       <Filter
-        filterField="ptype"
+        filterField="available"
         options={[
           { value: "all", label: "All" },
-          { value: "not-running", label: "Not running" },
-          { value: "need-repair", label: "Need repair" },
+          { value: "not-available", label: "Not available" },
+          { value: "available", label: "Available" },
         ]}
       />
 
@@ -18,12 +18,10 @@ function CabinTableOperation() {
         options={[
           { value: "name-asc", label: "Sort by name(A-Z)" },
           { value: "name-desc", label: "Sort by name(Z-A)" },
-          { value: "priority-asc", label: "Sort by priority(low to high)" },
-          { value: "priority-desc", label: "Sort by priority(high to low)" },
         ]}
       />
     </TableOperations>
   );
 }
 
-export default CabinTableOperation;
+export default PersonnelTableOperation;
