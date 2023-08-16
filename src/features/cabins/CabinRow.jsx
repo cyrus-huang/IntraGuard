@@ -89,7 +89,7 @@ function CabinRow({ room }) {
         <Img src={image} />
         <Cabin>{name}</Cabin>
         <div>{running ? "Computers Running" : "Not Running"}</div>
-        <div>{overall ? "Facilities operating" : "Not functioning"}</div>
+        <div>{overall ? "Facilities operating" : "Needs repairing"}</div>
         <div>{priority}</div>
         <div>
           <Modal>

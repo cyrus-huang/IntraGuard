@@ -54,12 +54,12 @@ function CabinTable() {
 
   return (
     <Menus>
-      <Table columns="0.6fr 1.6fr 2.2fr 1.6fr 1fr 0.6fr">
+      <Table columns="0.6fr 1.6fr 1.6fr 2.2fr 1fr 0.6fr">
         <Table.Header>
           <div></div>
           <div>Room</div>
           <div>Running</div>
-          <div>Overall</div>
+          <div>Overall Safety</div>
           <div>Priority</div>
           <div></div>
         </Table.Header>

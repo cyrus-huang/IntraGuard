@@ -2,7 +2,6 @@ import supabase, { supabaseUrl } from "./supabase";
 
 export async function getPersonnel() {
   const { data, error } = await supabase.from("personnel").select("*");
-  // console.log(data);
   if (error) throw new Error("Personnel can not be loaded.");
   return data;
 }

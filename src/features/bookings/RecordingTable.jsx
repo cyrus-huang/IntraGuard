@@ -1,33 +1,33 @@
-import BookingRow from "./BookingRow";
+import RecordingRow from "./RecordingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
-import { useBookings } from "./useBookings";
+import { useRecordings } from "./useRecordings";
 import Spinner from "../../ui/Spinner";
 import Pagination from "../../ui/Pagination";
 
-function BookingTable() {
-  const { bookings, isLoading, count } = useBookings();
+function RecordingTable() {
+  const { recordings, isLoading, count } = useRecordings();
 
   if (isLoading) return <Spinner />;
-  if (!bookings.length) return <Empty resourceName="bookings" />;
+  if (!recordings.length) return <Empty resourceName="recordings" />;
 
   return (
     <Menus>
       <Table columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem">
         <Table.Header>
-          <div>Cabin</div>
-          <div>Guest</div>
-          <div>Dates</div>
+          <div>Room</div>
+          <div>Personnel</div>
+          <div>Time</div>
           <div>Status</div>
-          <div>Amount</div>
+          <div>Repairing</div>
           <div></div>
         </Table.Header>
 
         <Table.Body
-          data={bookings}
-          render={(booking) => (
-            <BookingRow key={booking.id} booking={booking} />
+          data={recordings}
+          render={(recording) => (
+            <RecordingRow key={recording.id} recording={recording} />
           )}
         />
 
@@ -39,4 +39,4 @@ function BookingTable() {
   );
 }
 
-export default BookingTable;
+export default RecordingTable;

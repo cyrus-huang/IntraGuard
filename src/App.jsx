@@ -4,7 +4,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import GlobalStyles from "./styles/GlobalStyles";
 import Dashboard from "./pages/Dashboard";
-import Bookings from "./pages/Bookings";
 import Cabins from "./pages/Cabins";
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
@@ -18,6 +17,7 @@ import Checkin from "./pages/Checkin";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
 import Personnel from "./pages/Personnel";
+import Recordings from "./pages/Recordings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,8 +44,8 @@ function App() {
             >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="bookings" element={<Bookings />} />
-              <Route path="bookings/:bookingId" element={<BookingDetail />} />
+              <Route path="recordings" element={<Recordings />} />
+              <Route path="recordings/:bookingId" element={<BookingDetail />} />
               <Route path="checkin/:bookingId" element={<Checkin />} />
               <Route path="rooms" element={<Cabins />} />
               <Route path="personnel" element={<Personnel />} />

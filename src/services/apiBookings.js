@@ -1,13 +1,18 @@
 import { getToday } from "../utils/helpers";
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 import { PAGE_SIZE } from "../utils/constants";
 
-export async function getBookings({ filter, sort, page }) {
-  let query = supabase
-    .from("bookings")
-    .select("*, cabins(name), guests(full_name,email)", { count: "exact" });
+export async function getRecordings({ filter, sort, page }) {
+  // let { data: recordings, error } = await supabase
+  //   .from("recordings")
+  //   .select("*, rooms(name), personnel(name,phone)", { count: "exact" });
+  // console.log(recordings);
 
-  //filter
+  let query = supabase
+    .from("recordings")
+    .select("*, rooms(*), personnel(*)", { count: "exact" });
+
+  // filter
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
 
   //sort
@@ -21,21 +26,23 @@ export async function getBookings({ filter, sort, page }) {
   }
 
   const { data, error, count } = await query;
+  console.log(data);
 
-  if (error) throw new Error("Bookings cant be loaded.");
+  if (error) throw new Error("Recodings cannot be loaded.");
+
   return { data, count };
 }
 
 export async function getBooking(id) {
   const { data, error } = await supabase
-    .from("bookings")
+    .from("recordings")
     .select("*, cabins(*), guests(*)")
     .eq("id", id)
     .single();
 
   if (error) {
     console.error(error);
-    throw new Error("Booking not found");
+    throw new Error("Recording not found");
   }
 
   return data;
@@ -63,8 +70,8 @@ export async function getStaysAfterDate(date) {
     .from("bookings")
     // .select('*')
     .select("*, guests(full_name)")
-    .gte("start_date", date)
-    .lte("start_date", getToday());
+    .gte("start_time", date)
+    .lte("start_time", getToday());
 
   if (error) {
     console.error(error);
@@ -80,13 +87,13 @@ export async function getStaysTodayActivity() {
     .from("bookings")
     .select("*, guests(full_name, nationality, country_flag)")
     .or(
-      `and(status.eq.unconfirmed,start_date.eq.${getToday()}),and(status.eq.checked-in,end_date.eq.${getToday()})`
+      `and(status.eq.scheduled,start_time.eq.${getToday()}),and(status.eq.in-progress,end_date.eq.${getToday()})`
     )
     .order("created_at");
 
   // Equivalent to this. But by querying this, we only download the data we actually need, otherwise we would need ALL bookings ever created
-  // (stay.status === 'unconfirmed' && isToday(new Date(stay.start_date))) ||
-  // (stay.status === 'checked-in' && isToday(new Date(stay.end_date)))
+  // (stay.status === 'scheduled' && isToday(new Date(stay.start_time))) ||
+  // (stay.status === 'in-progress' && isToday(new Date(stay.end_date)))
 
   if (error) {
     console.error(error);
@@ -95,6 +102,7 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
+//ONLY responsible for checkout!!!
 export async function updateBooking(id, obj) {
   const { data, error } = await supabase
     .from("bookings")
@@ -110,13 +118,41 @@ export async function updateBooking(id, obj) {
   return data;
 }
 
-export async function deleteBooking(id) {
+export async function deleteRecording(id) {
   // REMEMBER RLS POLICIES
-  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+  const { data, error } = await supabase
+    .from("recordings")
+    .delete()
+    .eq("id", id);
 
   if (error) {
     console.error(error);
-    throw new Error("Booking could not be deleted");
+    throw new Error("Recording could not be deleted");
   }
+  return data;
+}
+
+export async function createEditRecording(newRecording, id) {
+  //create/edit Cabin
+  let query = supabase.from("recordings");
+  console.log(newRecording);
+  //create only
+  if (!id)
+    query = query
+      .insert([{ ...newRecording }])
+      .select()
+      .single();
+  //edit
+  if (id)
+    query = query
+      .update({ ...newRecording })
+      .eq("id", id)
+      .select()
+      .single();
+
+  const { data, error } = await query;
+  console.log(data);
+  if (error) throw new Error("Recordings can not be created.");
+
   return data;
 }

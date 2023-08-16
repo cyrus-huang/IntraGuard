@@ -1,9 +1,9 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getBookings } from "../../services/apiBookings";
+import { getRecordings } from "../../services/apiBookings";
 import { useSearchParams } from "react-router-dom";
 import { PAGE_SIZE } from "../../utils/constants";
 
-export function useBookings() {
+export function useRecordings() {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
 
@@ -15,9 +15,10 @@ export function useBookings() {
       : { field: "status", value: filterValue };
 
   //sort
-  const sortMethod = searchParams.get("sort") || "start_date-desc";
+  const sortMethod = searchParams.get("sort") || "start_time-desc";
   const [way, order] = sortMethod.split("-");
   const sort = { way, order };
+  // console.log(sort);
 
   //pagination
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
@@ -25,29 +26,29 @@ export function useBookings() {
   //query
   const {
     isLoading,
-    data: { data: bookings, count } = {},
+    data: { data: recordings, count } = {},
     error,
   } = useQuery({
-    queryKey: ["bookings", filter, sort, page],
-    queryFn: () => getBookings({ filter, sort, page }),
+    queryKey: ["recordings", filter, sort, page],
+    queryFn: () => getRecordings({ filter, sort, page }),
   });
 
   //prefetching
   const pageCount = Math.ceil(count / PAGE_SIZE);
   if (page < pageCount)
     queryClient.prefetchQuery({
-      queryKey: ["bookings", filter, sort, page + 1],
-      queryFn: () => getBookings({ filter, sort, page: page + 1 }),
+      queryKey: ["recordings", filter, sort, page + 1],
+      queryFn: () => getRecordings({ filter, sort, page: page + 1 }),
     });
   if (page > 1)
     queryClient.prefetchQuery({
-      queryKey: ["bookings", filter, sort, page - 1],
-      queryFn: () => getBookings({ filter, sort, page: page - 1 }),
+      queryKey: ["recordings", filter, sort, page - 1],
+      queryFn: () => getRecordings({ filter, sort, page: page - 1 }),
     });
 
   return {
     isLoading,
-    bookings,
+    recordings,
     error,
     count,
   };

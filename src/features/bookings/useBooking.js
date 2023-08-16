@@ -3,19 +3,19 @@ import { getBooking } from "../../services/apiBookings";
 import { useParams } from "react-router-dom";
 
 export function useBooking() {
-  const { bookingId } = useParams();
+  const { recordingId } = useParams();
 
   const {
     isLoading,
-    data: booking,
+    data: recording,
     error,
   } = useQuery({
-    queryKey: ["booking", bookingId],
-    queryFn: () => getBooking(bookingId),
+    queryKey: ["recording", recordingId], //different from recordings, this is the detailed page specialized for ONE RECORDING ONLY
+    queryFn: () => getBooking(recordingId),
   });
   return {
     isLoading,
-    booking,
+    recording,
     error,
   };
 }

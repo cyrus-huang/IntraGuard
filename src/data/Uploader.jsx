@@ -68,19 +68,19 @@ async function createBookings() {
       isPast(new Date(booking.end_date)) &&
       !isToday(new Date(booking.end_date))
     )
-      status = "checked-out";
+      status = "completed";
     if (
       isFuture(new Date(booking.start_date)) ||
       isToday(new Date(booking.start_date))
     )
-      status = "unconfirmed";
+      status = "scheduled";
     if (
       (isFuture(new Date(booking.end_date)) ||
         isToday(new Date(booking.end_date))) &&
       isPast(new Date(booking.start_date)) &&
       !isToday(new Date(booking.start_date))
     )
-      status = "checked-in";
+      status = "in-progress";
 
     return {
       ...booking,

@@ -105,7 +105,7 @@ const Footer = styled.footer`
 function BookingDataBox({ booking }) {
   const {
     created_at,
-    start_date,
+    start_time,
     end_date,
     num_nights,
     num_guests,
@@ -136,10 +136,10 @@ function BookingDataBox({ booking }) {
         </div>
 
         <p>
-          {format(new Date(start_date), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(start_date))
+          {format(new Date(start_time), "EEE, MMM dd yyyy")} (
+          {isToday(new Date(start_time))
             ? "Today"
-            : formatDistanceFromNow(start_date)}
+            : formatDistanceFromNow(start_time)}
           ) &mdash; {format(new Date(end_date), "EEE, MMM dd yyyy")}
         </p>
       </Header>

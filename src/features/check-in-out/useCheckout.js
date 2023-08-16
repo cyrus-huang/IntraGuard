@@ -8,7 +8,7 @@ export function useCheckout() {
   const { mutate: checkout, isLoading: isCheckingOut } = useMutation({
     mutationFn: (bookingId) =>
       updateBooking(bookingId, {
-        status: "checked-out",
+        status: "completed",
       }),
 
     onSuccess: (data) => {

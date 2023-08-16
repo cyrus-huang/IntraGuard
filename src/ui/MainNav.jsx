@@ -64,9 +64,9 @@ function MainNav() {
             <span>Home</span>
           </Link>
 
-          <Link to="/bookings">
+          <Link to="/recordings">
             <FaRegCalendarCheck />
-            <span>Bookings</span>
+            <span>Recordings</span>
           </Link>
 
           <Link to="/rooms">

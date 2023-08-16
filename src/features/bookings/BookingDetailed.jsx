@@ -16,7 +16,7 @@ import { FaArrowRightFromBracket } from "react-icons/fa6";
 import { useCheckout } from "../check-in-out/useCheckout";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
-import { useDeleteBooking } from "./useDeleteBooking";
+import { useDeleteRecording } from "./useDeleteRecording";
 import Empty from "../../ui/Empty";
 
 const HeadingGroup = styled.div`
@@ -28,7 +28,7 @@ const HeadingGroup = styled.div`
 function BookingDetailed() {
   const { isLoading, booking } = useBooking();
   const { checkout, isCheckingOut } = useCheckout();
-  const { deleteBooking, isDeleting } = useDeleteBooking();
+  const { deleteRecording, isDeleting } = useDeleteRecording();
 
   const moveBack = useMoveBack();
   const navigate = useNavigate();
@@ -39,9 +39,9 @@ function BookingDetailed() {
   const { status, id: bookingId } = booking;
 
   const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
+    scheduled: "blue",
+    "in-progress": "green",
+    completed: "silver",
   };
 
   return (
@@ -57,13 +57,13 @@ function BookingDetailed() {
       <BookingDataBox booking={booking} />
 
       <ButtonGroup>
-        {status === "unconfirmed" && (
+        {status === "scheduled" && (
           <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
             Check in
           </Button>
         )}
 
-        {status === "checked-in" && (
+        {status === "in-progress" && (
           <Button
             icon={<FaArrowRightFromBracket />}
             onClick={() => checkout(bookingId)}
@@ -83,7 +83,7 @@ function BookingDetailed() {
               resourceName="booking"
               disabled={isDeleting}
               onConfirm={() =>
-                deleteBooking(bookingId, { onSettled: () => navigate(-1) })
+                deleteRecording(bookingId, { onSettled: () => navigate(-1) })
               }
             ></ConfirmDelete>
           </Modal.Window>

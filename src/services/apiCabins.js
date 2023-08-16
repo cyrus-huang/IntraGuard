@@ -18,16 +18,34 @@ export async function createEditRoom(newRoomData, id) {
     : `${supabaseUrl}/storage/v1/object/public/room-images/${imageName}`;
   //create/edit Cabin
   let query = supabase.from("rooms");
+  //inner judge for overall safety
+  const final_judge =
+    newRoomData.air_condition &&
+    newRoomData.electricity &&
+    newRoomData.environment &&
+    newRoomData.fire_control &&
+    newRoomData.security &&
+    newRoomData.ups &&
+    newRoomData.wiring;
+  // console.log(
+  //   newRoomData.air_condition &&
+  //     newRoomData.electricity &&
+  //     newRoomData.environment &&
+  //     newRoomData.fire_control &&
+  //     newRoomData.security &&
+  //     newRoomData.ups &&
+  //     newRoomData.wiring
+  // );
   //create only
   if (!id)
     query = query
-      .insert([{ ...newRoomData, image: imagePath }])
+      .insert([{ ...newRoomData, overall: final_judge, image: imagePath }])
       .select()
       .single();
   //edit
   if (id)
     query = query
-      .update({ ...newRoomData, image: imagePath })
+      .update({ ...newRoomData, overall: final_judge, image: imagePath })
       .eq("id", id)
       .select()
       .single();

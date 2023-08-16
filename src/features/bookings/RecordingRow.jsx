@@ -1,11 +1,8 @@
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
-
 import Tag from "../../ui/Tag";
 import Table from "../../ui/Table";
 import Modal from "../../ui/Modal";
-
-import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
 import Menus from "../../ui/Menus";
 import {
@@ -13,11 +10,16 @@ import {
   FaArrowRightFromBracket,
   FaArrowRightToBracket,
   FaTrash,
+  FaPen,
+  FaCopy,
 } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useCheckout } from "../check-in-out/useCheckout";
 import ConfirmDelete from "../../ui/ConfirmDelete";
-import { useDeleteBooking } from "./useDeleteBooking";
+import { useDeleteRecording } from "./useDeleteRecording";
+import CreateRecordingForm from "./CreateRecordingForm";
+import { useRooms } from "../cabins/useRooms";
+import { usePersonnel } from "../personnel/usePersonnel";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -46,84 +48,98 @@ const Amount = styled.div`
   font-weight: 500;
 `;
 
-function BookingRow({
-  booking: {
-    id: bookingId,
+function RecordingRow({ recording }) {
+  const {
+    id: recordingId,
     created_at,
-    start_date,
-    end_date,
-    num_nights,
-    num_guests,
-    total_price,
+    start_time,
+    end_time,
     status,
-    guests: { full_name: guest_name, email },
-    cabins: { name: cabin_name },
-  },
-}) {
+    item,
+    comments,
+    repairing,
+    personnel: { name: person_name, phone },
+    rooms: { name: room_name },
+  } = recording;
   const navigate = useNavigate();
   const { checkout, isCheckingOut } = useCheckout();
-  const { deleteBooking, isDeleting } = useDeleteBooking();
+  const { deleteRecording, isDeleting } = useDeleteRecording();
   const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
+    scheduled: "blue",
+    "in-progress": "green",
+    completed: "silver",
   };
+
+  //obtain room data using hooks
+  const { rooms, isLoading: isLoadingRoom } = useRooms();
+
+  //obtain personnel data using hooks
+  const { personnel, isLoading: isLoadingPersonnel } = usePersonnel();
+
+  // const { isCreating, createRecording } = useCreateRecording();
 
   return (
     <Table.Row>
-      <Cabin>{cabin_name}</Cabin>
+      <Cabin>{room_name}</Cabin>
 
       <Stacked>
-        <span>{guest_name}</span>
-        <span>{email}</span>
+        <span>{person_name}</span>
+        <span>{phone}</span>
       </Stacked>
 
       <Stacked>
         <span>
-          {isToday(new Date(start_date))
+          {isToday(new Date(start_time))
             ? "Today"
-            : formatDistanceFromNow(start_date)}{" "}
-          &rarr; {num_nights} night stay
+            : formatDistanceFromNow(start_time)}{" "}
+          {/* &rarr; {num_nights} night stay */}
         </span>
         <span>
-          {format(new Date(start_date), "MMM dd yyyy")} &mdash;{" "}
-          {format(new Date(end_date), "MMM dd yyyy")}
+          {format(new Date(start_time), "HH:mm MMM dd yyyy")} &mdash;{" "}
+          {format(new Date(end_time), "HH:mm MMM dd yyyy")}
         </span>
       </Stacked>
 
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
-      <Amount>{formatCurrency(total_price)}</Amount>
+      <Stacked>
+        <span>{repairing}</span>
+        <span></span>
+      </Stacked>
 
       <Modal>
         <Menus.Menu>
-          <Menus.Toggle id={bookingId} />
-          <Menus.List id={bookingId}>
+          <Menus.Toggle id={recordingId} />
+          <Menus.List id={recordingId}>
             <Menus.Button
               icon={<FaEye />}
-              onClick={() => navigate(`/bookings/${bookingId}`)}
+              onClick={() => navigate(`/recordings/${recordingId}`)}
             >
               See Details
             </Menus.Button>
 
-            {status === "unconfirmed" && (
+            {status === "scheduled" && (
               <Menus.Button
                 icon={<FaArrowRightToBracket />}
-                onClick={() => navigate(`/checkin/${bookingId}`)}
+                onClick={() => navigate(`/checkin/${recordingId}`)}
               >
                 Check in
               </Menus.Button>
             )}
 
-            {status === "checked-in" && (
+            {status === "in-progress" && (
               <Menus.Button
                 icon={<FaArrowRightFromBracket />}
-                onClick={() => checkout(bookingId)}
+                onClick={() => checkout(recordingId)}
                 disabled={isCheckingOut}
               >
                 Check out
               </Menus.Button>
             )}
+
+            <Modal.Open opens="edit">
+              <Menus.Button icon={<FaPen />}>Edit</Menus.Button>
+            </Modal.Open>
 
             <Modal.Open opens="delete">
               <Menus.Button icon={<FaTrash />}>Delete</Menus.Button>
@@ -131,11 +147,19 @@ function BookingRow({
           </Menus.List>
         </Menus.Menu>
 
+        <Modal.Window name="edit">
+          <CreateRecordingForm
+            recordingToEdit={recording}
+            rooms={rooms}
+            personnel={personnel}
+          />
+        </Modal.Window>
+
         <Modal.Window name="delete">
           <ConfirmDelete
             resourceName="booking"
             disabled={isDeleting}
-            onConfirm={() => deleteBooking(bookingId)}
+            onConfirm={() => deleteRecording(recordingId)}
           ></ConfirmDelete>
         </Modal.Window>
       </Modal>
@@ -143,4 +167,4 @@ function BookingRow({
   );
 }
 
-export default BookingRow;
+export default RecordingRow;
