@@ -11,6 +11,7 @@ import DataItem from "../../ui/DataItem";
 import { Flag } from "../../ui/Flag";
 
 import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import { FaThumbtack } from "react-icons/fa6";
 
 const StyledBookingDataBox = styled.section`
   /* Box */
@@ -102,76 +103,63 @@ const Footer = styled.footer`
 `;
 
 // A purely presentational component
-function BookingDataBox({ booking }) {
+function RecordingDataBox({ recording }) {
   const {
     created_at,
     start_time,
-    end_date,
-    num_nights,
-    num_guests,
-    cabin_price,
-    extras_price,
-    total_price,
-    has_breakfast,
-    observations,
-    is_paid,
-    guests: {
-      full_name: guest_name,
-      email,
-      country,
-      country_flag,
-      national_id,
-    },
-    cabins: { name: cabin_name },
-  } = booking;
+    end_time,
+    status,
+    item,
+    comments,
+    repairing,
+    fixed,
+    personnel: { name: person_name, pid, phone, photo },
+    rooms: { name: room_name },
+  } = recording;
 
   return (
     <StyledBookingDataBox>
       <Header>
         <div>
-          <HiOutlineHomeModern />
+          <FaThumbtack />
           <p>
-            {num_nights} nights in Cabin <span>{cabin_name}</span>
+            {repairing.toUpperCase()} problem in Room <span>{room_name}</span>
           </p>
         </div>
 
         <p>
-          {format(new Date(start_time), "EEE, MMM dd yyyy")} (
+          {format(new Date(start_time), "HH:mm, MMM dd yyyy")} (
           {isToday(new Date(start_time))
             ? "Today"
             : formatDistanceFromNow(start_time)}
-          ) &mdash; {format(new Date(end_date), "EEE, MMM dd yyyy")}
+          ) &mdash; {format(new Date(end_time), "HH:mm, MMM dd yyyy")}
         </p>
       </Header>
 
       <Section>
         <Guest>
-          {country_flag && (
-            <Flag src={country_flag} alt={`Flag of ${country}`} />
-          )}
-          <p>
-            {guest_name} {num_guests > 1 ? `+ ${num_guests - 1} guests` : ""}
-          </p>
+          <Flag src={photo} alt={`Avatar of ${person_name}`} />
+          <p>{person_name}</p>
           <span>&bull;</span>
-          <p>{email}</p>
+          <p>Phone {phone}</p>
           <span>&bull;</span>
-          <p>National ID {national_id}</p>
+          <p>Work Number {pid}</p>
         </Guest>
 
-        {observations && (
+        {comments && (
           <DataItem
             icon={<HiOutlineChatBubbleBottomCenterText />}
-            label="Observations"
+            label="Comments"
           >
-            {observations}
+            {comments}
           </DataItem>
         )}
 
-        <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
-          {has_breakfast ? "Yes" : "No"}
+        <DataItem icon={<HiOutlineCheckCircle />} label="Problem Fixed?">
+          {fixed ? "Yes" : "No"}
         </DataItem>
 
-        <Price is_paid={is_paid}>
+        {/* <Price is_paid={is_paid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
             {formatCurrency(total_price)}
 
@@ -182,14 +170,16 @@ function BookingDataBox({ booking }) {
           </DataItem>
 
           <p>{is_paid ? "Paid" : "Will pay at property"}</p>
-        </Price>
+        </Price> */}
       </Section>
 
       <Footer>
-        <p>Booked {format(new Date(created_at), "EEE, MMM dd yyyy, p")}</p>
+        <p>
+          Task created at {format(new Date(created_at), "EEE, MMM dd yyyy, p")}
+        </p>
       </Footer>
     </StyledBookingDataBox>
   );
 }
 
-export default BookingDataBox;
+export default RecordingDataBox;

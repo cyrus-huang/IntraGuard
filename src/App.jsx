@@ -45,8 +45,11 @@ function App() {
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="recordings" element={<Recordings />} />
-              <Route path="recordings/:bookingId" element={<BookingDetail />} />
-              <Route path="checkin/:bookingId" element={<Checkin />} />
+              <Route
+                path="recordings/:recordingId"
+                element={<BookingDetail />}
+              />
+              <Route path="register/:recordingId" element={<Checkin />} />
               <Route path="rooms" element={<Cabins />} />
               <Route path="personnel" element={<Personnel />} />
               <Route path="users" element={<Users />} />

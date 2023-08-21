@@ -32,6 +32,7 @@ function CreateRecordingForm({
 }) {
   // console.log(rooms);
   // console.log(personnel);
+  // console.log(recordingToEdit);
 
   const { id: oldId, ...oldValues } = recordingToEdit;
   const isEdit = Boolean(oldId);
@@ -52,7 +53,11 @@ function CreateRecordingForm({
     if (isEdit)
       editRecording(
         {
-          newRecording: { ...data, start_time: startTime, end_time: endTime },
+          newRecordingComplex: {
+            ...data,
+            start_time: startTime,
+            end_time: endTime,
+          },
           id: oldId,
         },
         {
@@ -188,6 +193,16 @@ function CreateRecordingForm({
             })}
           />
         </FormRow>
+        <FormRow label="Fixed" error={errors?.fixed?.message}>
+          <Input
+            type="checkbox"
+            id="fixed"
+            disabled={isChanging}
+            {...register("fixed", {
+              // required: "This field is required",
+            })}
+          />
+        </FormRow>
 
         <FormRow>
           {/* type is an HTML attribute! */}
@@ -199,14 +214,14 @@ function CreateRecordingForm({
             Cancel
           </Button>
           <Button disabled={isChanging}>
-            {isEdit ? "Edit personnel" : "Create new personnel"}
+            {isEdit ? "Edit recording" : "Create new recording"}
           </Button>
         </FormRow>
       </Form>
 
-      <div>{console.log(getValues("status"))}</div>
+      {/* <div>{console.log(getValues("status"))}</div> */}
       {/* <div>{console.log("Start Time " + getValues("start_time"))}</div> */}
-      <div>{console.log("Real Start Time " + startTime)}</div>
+      {/* <div>{console.log("Real Start Time " + startTime)}</div> */}
     </>
   );
 }

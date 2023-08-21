@@ -5,7 +5,35 @@ import { createEditRecording } from "../../services/apiBookings";
 export function useEditRecording() {
   const queryClient = useQueryClient();
   const { mutate: editRecording, isLoading: isEditing } = useMutation({
-    mutationFn: ({ newRecording, id }) => createEditRecording(newRecording, id),
+    mutationFn: ({ newRecordingComplex, id }) => {
+      const {
+        created_at,
+        start_time,
+        end_time,
+        status,
+        item,
+        comments,
+        repairing,
+        fixed,
+        person_id,
+        room_id,
+      } = newRecordingComplex;
+      createEditRecording(
+        {
+          created_at,
+          start_time,
+          end_time,
+          status,
+          item,
+          comments,
+          repairing,
+          fixed,
+          person_id,
+          room_id,
+        },
+        id
+      );
+    },
     onSuccess: () => {
       toast.success("Recording successfully edited");
       queryClient.invalidateQueries({ queryKey: ["recordings"] });

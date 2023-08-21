@@ -33,10 +33,11 @@ export async function getRecordings({ filter, sort, page }) {
   return { data, count };
 }
 
-export async function getBooking(id) {
+export async function getRecording(id) {
+  console.log(id);
   const { data, error } = await supabase
     .from("recordings")
-    .select("*, cabins(*), guests(*)")
+    .select("*, rooms(*), personnel(*)")
     .eq("id", id)
     .single();
 
@@ -87,13 +88,13 @@ export async function getStaysTodayActivity() {
     .from("bookings")
     .select("*, guests(full_name, nationality, country_flag)")
     .or(
-      `and(status.eq.scheduled,start_time.eq.${getToday()}),and(status.eq.in-progress,end_date.eq.${getToday()})`
+      `and(status.eq.scheduled,start_time.eq.${getToday()}),and(status.eq.in-progress,end_time.eq.${getToday()})`
     )
     .order("created_at");
 
   // Equivalent to this. But by querying this, we only download the data we actually need, otherwise we would need ALL bookings ever created
   // (stay.status === 'scheduled' && isToday(new Date(stay.start_time))) ||
-  // (stay.status === 'in-progress' && isToday(new Date(stay.end_date)))
+  // (stay.status === 'in-progress' && isToday(new Date(stay.end_time)))
 
   if (error) {
     console.error(error);
@@ -102,18 +103,21 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-//ONLY responsible for checkout!!!
-export async function updateBooking(id, obj) {
+//checkin and checkout!!!
+export async function updateRecording(id, obj) {
   const { data, error } = await supabase
-    .from("bookings")
+    .from("recordings")
     .update(obj)
     .eq("id", id)
     .select()
     .single();
+  // console.log(id);
+  // console.log(obj);
+  // console.log(data);
 
   if (error) {
     console.error(error);
-    throw new Error("Booking could not be updated");
+    throw new Error("Recording could not be updated");
   }
   return data;
 }
@@ -136,6 +140,7 @@ export async function createEditRecording(newRecording, id) {
   //create/edit Cabin
   let query = supabase.from("recordings");
   console.log(newRecording);
+
   //create only
   if (!id)
     query = query

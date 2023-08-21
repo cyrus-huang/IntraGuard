@@ -58,6 +58,7 @@ function RecordingRow({ recording }) {
     item,
     comments,
     repairing,
+    fixed,
     personnel: { name: person_name, phone },
     rooms: { name: room_name },
   } = recording;
@@ -104,7 +105,7 @@ function RecordingRow({ recording }) {
 
       <Stacked>
         <span>{repairing}</span>
-        <span></span>
+        <span>{fixed ? "fixed" : "not fixed"}</span>
       </Stacked>
 
       <Modal>
@@ -121,7 +122,7 @@ function RecordingRow({ recording }) {
             {status === "scheduled" && (
               <Menus.Button
                 icon={<FaArrowRightToBracket />}
-                onClick={() => navigate(`/checkin/${recordingId}`)}
+                onClick={() => navigate(`/register/${recordingId}`)}
               >
                 Check in
               </Menus.Button>
@@ -130,8 +131,7 @@ function RecordingRow({ recording }) {
             {status === "in-progress" && (
               <Menus.Button
                 icon={<FaArrowRightFromBracket />}
-                onClick={() => checkout(recordingId)}
-                disabled={isCheckingOut}
+                onClick={() => navigate(`/register/${recordingId}`)}
               >
                 Check out
               </Menus.Button>

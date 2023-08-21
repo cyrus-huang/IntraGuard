@@ -41,13 +41,13 @@ function TodayItem({ activity }) {
           size="small"
           variation="primary"
           as={Link}
-          to={`/checkin/${id}`}
+          to={`/register/${id}`}
         >
           Check in
         </Button>
       )}
 
-      {status === "in-progress" && <CheckoutButton bookingId={id} />}
+      {status === "in-progress" && <CheckoutButton recordingId={id} />}
     </StyledTodayItem>
   );
 }

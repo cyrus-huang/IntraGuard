@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBooking } from "../../services/apiBookings";
+import { getRecording } from "../../services/apiBookings";
 import { useParams } from "react-router-dom";
 
-export function useBooking() {
+export function useRecording() {
   const { recordingId } = useParams();
 
   const {
@@ -11,7 +11,7 @@ export function useBooking() {
     error,
   } = useQuery({
     queryKey: ["recording", recordingId], //different from recordings, this is the detailed page specialized for ONE RECORDING ONLY
-    queryFn: () => getBooking(recordingId),
+    queryFn: () => getRecording(recordingId),
   });
   return {
     isLoading,

@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import BookingDataBox from "../../features/bookings/BookingDataBox";
-
 import Row from "../../ui/Row";
 import Heading from "../../ui/Heading";
 import ButtonGroup from "../../ui/ButtonGroup";
@@ -8,13 +6,15 @@ import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
-import { useBooking } from "../bookings/useBooking";
+import { useRecording } from "../bookings/useRecording";
 import Spinner from "../../ui/Spinner";
 import { useEffect, useState } from "react";
 import Checkbox from "../../ui/Checkbox";
 import { formatCurrency } from "../../utils/helpers";
 import { useCheckin } from "./useCheckin";
 import { useSettings } from "../settings/UseSettings";
+import RecordingDataBox from "../bookings/RecordingDataBox";
+import { useCheckout } from "./useCheckout";
 
 const Box = styled.div`
   /* Box */
@@ -25,92 +25,78 @@ const Box = styled.div`
 `;
 
 function CheckinBooking() {
-  const [confirmPaid, setConfirmPaid] = useState(false);
-  const [addBreakfast, setAddBreakfast] = useState(false);
-  const { booking, isLoading } = useBooking();
+  const { isLoading, recording } = useRecording();
+  const [confirmFixed, setConfirmFixed] = useState(false);
   const moveBack = useMoveBack();
   const { checkin, isCheckingIn } = useCheckin();
+  const { checkout, isCheckingOut } = useCheckout();
   const { settings, isLoading: isLoadingSettings } = useSettings();
-
-  //renew confirm state from data coming from database
-  useEffect(() => setConfirmPaid(booking?.is_paid ?? false), [booking]);
 
   if (isLoading || isLoadingSettings) return <Spinner />;
 
   const {
-    id: bookingId,
-    guests,
-    total_price,
-    num_guests,
-    has_breakfast,
-    num_nights,
-  } = booking;
+    id: recordingId,
+    created_at,
+    start_time,
+    end_time,
+    status,
+    item,
+    comments,
+    repairing,
+    fixed,
+    personnel: { name: person_name, pid, phone, photo },
+    rooms: { name: room_name, id: room_id },
+  } = recording;
 
-  const optionalBreakfastPrice =
-    settings.breakfast_price * num_nights * num_guests;
-
-  function handleCheckin() {
-    if (!confirmPaid) return;
-    if (addBreakfast) {
-      checkin({
-        bookingId,
-        breakfast: {
-          has_breakfast: true,
-          extras_price: optionalBreakfastPrice,
-          total_price: total_price + optionalBreakfastPrice,
-        },
-      });
-    } else {
-      checkin({ bookingId, breakfast: {} });
+  function handleRegister() {
+    //check in
+    if (status === "scheduled") checkin({ recordingId });
+    //check out
+    if (status === "in-progress") {
+      console.log("check out!!");
+      checkout({ recordingId, confirmFixed });
     }
   }
 
   return (
     <>
       <Row type="hori">
-        <Heading as="h1">Check in booking #{bookingId}</Heading>
+        <Heading as="h1">
+          {status === "scheduled"
+            ? `Check in Repairing Record #${recordingId}`
+            : status === "in-progress"
+            ? `Check out Repairing Record #${recordingId}`
+            : `Session Ended: Repairing Record #${recordingId}`}
+        </Heading>
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
       </Row>
 
-      <BookingDataBox booking={booking} />
+      <RecordingDataBox recording={recording} />
 
-      {!has_breakfast && (
+      {status === "in-progress" && (
         <Box>
           <Checkbox
-            checked={addBreakfast}
-            onChange={() => {
-              setAddBreakfast((add) => !add);
-              setConfirmPaid(false);
-            }}
-            id="breakfast"
+            checked={confirmFixed}
+            onChange={() => setConfirmFixed((confirm) => !confirm)}
+            id="confirm"
+            disabled={isCheckingIn}
           >
-            Add breakfast for {formatCurrency(optionalBreakfastPrice)}?
+            Problem {repairing} has been fixed.
           </Checkbox>
         </Box>
       )}
 
-      <Box>
-        <Checkbox
-          checked={confirmPaid}
-          onChange={() => setConfirmPaid((confirm) => !confirm)}
-          id="confirm"
-          disabled={confirmPaid || isCheckingIn}
-        >
-          I confirm that {guests.full_name} has paid the total amount of{" "}
-          {!addBreakfast
-            ? formatCurrency(total_price)
-            : `${formatCurrency(
-                total_price + optionalBreakfastPrice
-              )} (${formatCurrency(total_price)} + ${formatCurrency(
-                optionalBreakfastPrice
-              )})`}
-        </Checkbox>
-      </Box>
-
       <ButtonGroup>
-        <Button onClick={handleCheckin} disabled={!confirmPaid || isCheckingIn}>
-          Check in booking #{bookingId}
-        </Button>
+        {status === "scheduled" && (
+          <Button onClick={handleRegister} disabled={isCheckingIn}>
+            Check in Record #{recordingId}
+          </Button>
+        )}
+        {status === "in-progress" && (
+          <Button onClick={handleRegister} disabled={isCheckingOut}>
+            Check out Record #{recordingId}
+          </Button>
+        )}
         <Button variation="secondary" onClick={moveBack}>
           Back
         </Button>
