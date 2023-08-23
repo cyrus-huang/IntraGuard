@@ -83,11 +83,6 @@ function MainNav() {
             <FaChalkboardUser />
             <span>Users</span>
           </Link>
-
-          <Link to="/settings">
-            <FaGear />
-            <span>Settings</span>
-          </Link>
         </li>
       </NavList>
     </nav>

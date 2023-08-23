@@ -6,7 +6,6 @@ import GlobalStyles from "./styles/GlobalStyles";
 import Dashboard from "./pages/Dashboard";
 import Cabins from "./pages/Cabins";
 import Users from "./pages/Users";
-import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
@@ -53,7 +52,6 @@ function App() {
               <Route path="rooms" element={<Cabins />} />
               <Route path="personnel" element={<Personnel />} />
               <Route path="users" element={<Users />} />
-              <Route path="settings" element={<Settings />} />
               <Route path="account" element={<Account />} />
             </Route>
 

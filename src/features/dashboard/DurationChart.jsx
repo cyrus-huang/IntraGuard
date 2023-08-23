@@ -30,42 +30,42 @@ const ChartBox = styled.div`
 
 const startDataLight = [
   {
-    duration: "1 night",
+    type: "air_condition",
     value: 0,
     color: "#ef4444",
   },
   {
-    duration: "2 nights",
+    type: "electricity",
     value: 0,
     color: "#f97316",
   },
   {
-    duration: "3 nights",
+    type: "fire_control",
     value: 0,
     color: "#eab308",
   },
   {
-    duration: "4-5 nights",
+    type: "environment",
     value: 0,
     color: "#84cc16",
   },
   {
-    duration: "6-7 nights",
+    type: "security",
     value: 0,
     color: "#22c55e",
   },
   {
-    duration: "8-14 nights",
+    type: "wiring",
     value: 0,
     color: "#14b8a6",
   },
   {
-    duration: "15-21 nights",
+    type: "ups",
     value: 0,
     color: "#3b82f6",
   },
   {
-    duration: "21+ nights",
+    type: "running",
     value: 0,
     color: "#a855f7",
   },
@@ -73,65 +73,65 @@ const startDataLight = [
 
 const startDataDark = [
   {
-    duration: "1 night",
+    type: "air_condition",
     value: 0,
     color: "#b91c1c",
   },
   {
-    duration: "2 nights",
+    type: "electricity",
     value: 0,
     color: "#c2410c",
   },
   {
-    duration: "3 nights",
+    type: "fire_control",
     value: 0,
     color: "#a16207",
   },
   {
-    duration: "4-5 nights",
+    type: "environment",
     value: 0,
     color: "#4d7c0f",
   },
   {
-    duration: "6-7 nights",
+    type: "security",
     value: 0,
     color: "#15803d",
   },
   {
-    duration: "8-14 nights",
+    type: "wiring",
     value: 0,
     color: "#0f766e",
   },
   {
-    duration: "15-21 nights",
+    type: "ups",
     value: 0,
     color: "#1d4ed8",
   },
   {
-    duration: "21+ nights",
+    type: "running",
     value: 0,
     color: "#7e22ce",
   },
 ];
 
-function prepareData(startData, stays) {
+function prepareData(startData, recordings) {
   function incArrayValue(arr, field) {
     return arr.map((obj) =>
-      obj.duration === field ? { ...obj, value: obj.value + 1 } : obj
+      obj.type === field ? { ...obj, value: obj.value + 1 } : obj
     );
   }
 
-  const data = stays
+  const data = recordings
     .reduce((arr, cur) => {
-      const num = cur.num_nights;
-      if (num === 1) return incArrayValue(arr, "1 night");
-      if (num === 2) return incArrayValue(arr, "2 nights");
-      if (num === 3) return incArrayValue(arr, "3 nights");
-      if ([4, 5].includes(num)) return incArrayValue(arr, "4-5 nights");
-      if ([6, 7].includes(num)) return incArrayValue(arr, "6-7 nights");
-      if (num >= 8 && num <= 14) return incArrayValue(arr, "8-14 nights");
-      if (num >= 15 && num <= 21) return incArrayValue(arr, "15-21 nights");
-      if (num >= 21) return incArrayValue(arr, "21+ nights");
+      const type = cur.repairing;
+      if (type === "air_condition") return incArrayValue(arr, "air_condition");
+      if (type === "electricity") return incArrayValue(arr, "electricity");
+      if (type === "fire_control") return incArrayValue(arr, "fire_control");
+      if (type === "environment") return incArrayValue(arr, "environment");
+      if (type === "security") return incArrayValue(arr, "security");
+      if (type === "wiring") return incArrayValue(arr, "wiring");
+      if (type === "ups") return incArrayValue(arr, "ups");
+      if (type === "running") return incArrayValue(arr, "running");
       return arr;
     }, startData)
     .filter((obj) => obj.value > 0);
@@ -139,32 +139,28 @@ function prepareData(startData, stays) {
   return data;
 }
 
-function DurationChart({ confirmedStays }) {
+function DurationChart({ recordings }) {
   const { isDark } = useDarkMode();
   const startData = isDark ? startDataDark : startDataLight;
-  const data = prepareData(startData, confirmedStays);
+  const data = prepareData(startData, recordings);
 
   return (
     <ChartBox>
-      <Heading as="h3">Stay duration summary</Heading>
+      <Heading as="h3">Repairing History</Heading>
       <ResponsiveContainer width="100%" height={250}>
         <PieChart>
           <Pie
             data={data}
-            nameKey="duration"
+            nameKey="type"
             dataKey="value"
-            innerRadius={75}
+            innerRadius={70}
             outerRadius={100}
             cx="45%"
             cy="50%"
             paddingAngle={2}
           >
             {data.map((entry) => (
-              <Cell
-                fill={entry.color}
-                stroke={entry.color}
-                key={entry.duration}
-              />
+              <Cell fill={entry.color} stroke={entry.color} key={entry.type} />
             ))}
           </Pie>
           <Tooltip />

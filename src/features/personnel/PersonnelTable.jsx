@@ -50,11 +50,10 @@ function PersonnelTable() {
   const sort = searchParams.get("sort") || "name-asc";
   const [way, order] = sort.split("-");
   const symbol = order === "asc" ? 1 : -1;
-  console.log(filterPersonnel);
+
   const sortedPersonnel = filterPersonnel.sort(
     (a, b) => (a[way].charCodeAt(0) - b[way].charCodeAt(0)) * symbol
   );
-  console.log(sortedPersonnel);
 
   return (
     <Menus>

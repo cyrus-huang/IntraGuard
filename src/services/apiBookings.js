@@ -1,4 +1,4 @@
-import { getToday } from "../utils/helpers";
+import { getToday, getTomorrow } from "../utils/helpers";
 import supabase, { supabaseUrl } from "./supabase";
 import { PAGE_SIZE } from "../utils/constants";
 
@@ -49,48 +49,36 @@ export async function getRecording(id) {
   return data;
 }
 
-// Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.
-export async function getBookingsAfterDate(date) {
+// Returns all recordings that are were created after the given date.
+export async function getRecordingsAfterDate(date) {
   const { data, error } = await supabase
-    .from("bookings")
-    .select("created_at, total_price, extras_price")
-    .gte("created_at", date)
-    .lte("created_at", getToday({ end: true }));
-
-  if (error) {
-    console.error(error);
-    throw new Error("Bookings could not get loaded");
-  }
-
-  return data;
-}
-
-// Returns all STAYS that are were created after the given date
-export async function getStaysAfterDate(date) {
-  const { data, error } = await supabase
-    .from("bookings")
-    // .select('*')
-    .select("*, guests(full_name)")
+    .from("recordings")
+    .select("*")
     .gte("start_time", date)
-    .lte("start_time", getToday());
+    .lte("start_time", getToday({ end: true }));
 
   if (error) {
     console.error(error);
-    throw new Error("Bookings could not get loaded");
+    throw new Error("Recordings could not get loaded");
   }
 
   return data;
 }
 
 // Activity means that there is a check in or a check out today
-export async function getStaysTodayActivity() {
+export async function getTodayActivity() {
   const { data, error } = await supabase
-    .from("bookings")
-    .select("*, guests(full_name, nationality, country_flag)")
+    .from("recordings")
+    .select("*, rooms(name), personnel(name)")
+    // .or(
+    //   `and(status.eq.scheduled,start_time.eq.${getToday()}),and(status.eq.in-progress,end_time.eq.${getToday()})`
+    // )
     .or(
-      `and(status.eq.scheduled,start_time.eq.${getToday()}),and(status.eq.in-progress,end_time.eq.${getToday()})`
+      `and(and(status.eq.scheduled,start_time.gt.${getToday()}),and(status.eq.scheduled,start_time.lt.${getTomorrow()})),and(and(status.eq.in-progress,end_time.gt.${getToday()}),and(status.eq.in-progress,end_time.lt.${getTomorrow()}))`
     )
-    .order("created_at");
+    .order("start_time");
+
+  console.log(data);
 
   // Equivalent to this. But by querying this, we only download the data we actually need, otherwise we would need ALL bookings ever created
   // (stay.status === 'scheduled' && isToday(new Date(stay.start_time))) ||

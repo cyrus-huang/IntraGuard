@@ -3,11 +3,10 @@ import Tag from "../../ui/Tag";
 import { Flag } from "../../ui/Flag";
 import Button from "../../ui/Button";
 import { Link } from "react-router-dom";
-import CheckoutButton from "./CheckoutButton";
 
 const StyledTodayItem = styled.li`
   display: grid;
-  grid-template-columns: 9rem 2rem 1fr 7rem 9rem;
+  grid-template-columns: 10rem 15rem 1fr 10rem 3rem;
   gap: 1.2rem;
   align-items: center;
 
@@ -20,21 +19,20 @@ const StyledTodayItem = styled.li`
   }
 `;
 
-const Guest = styled.div`
+const Room = styled.div`
   font-weight: 500;
 `;
 
 function TodayItem({ activity }) {
-  const { id, status, guests, num_nights } = activity;
+  const { id, status, personnel, rooms } = activity;
 
   return (
     <StyledTodayItem>
-      {status === "scheduled" && <Tag type="green">Arriving</Tag>}
-      {status === "in-progress" && <Tag type="blue">Departing</Tag>}
+      {status === "scheduled" && <Tag type="green">Scheduled</Tag>}
+      {status === "in-progress" && <Tag type="blue">In Progress</Tag>}
 
-      <Flag src={guests.country_flag} alt={`Flag of ${guests.country}`} />
-      <Guest>{guests.full_name} </Guest>
-      <div>{num_nights} nights</div>
+      <Room>Machine Room {rooms.name}</Room>
+      <div>{personnel.name} </div>
 
       {status === "scheduled" && (
         <Button
@@ -47,7 +45,16 @@ function TodayItem({ activity }) {
         </Button>
       )}
 
-      {status === "in-progress" && <CheckoutButton recordingId={id} />}
+      {status === "in-progress" && (
+        <Button
+          size="small"
+          variation="primary"
+          as={Link}
+          to={`/register/${id}`}
+        >
+          Check out
+        </Button>
+      )}
     </StyledTodayItem>
   );
 }

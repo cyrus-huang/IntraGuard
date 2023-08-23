@@ -1,42 +1,28 @@
-import { formatCurrency } from "../../utils/helpers";
+import { FaTools } from "react-icons/fa";
 import Stat from "./Stat";
-import {
-  FaCalendarCheck,
-  FaChartSimple,
-  FaMoneyBill,
-  FaPersonWalkingLuggage,
-} from "react-icons/fa6";
+import { FaChartSimple, FaCheckToSlot } from "react-icons/fa6";
 
-function Statistics({ bookings, confirmedStays, numDays, cabinLen }) {
-  const numBookings = bookings.length;
-  const sales = bookings.reduce((acc, cur) => acc + cur.total_price, 0);
-  const checkins = confirmedStays.length;
-  const occupation =
-    confirmedStays.reduce((acc, cur) => acc + cur.num_nights, 0) /
-    (numDays * cabinLen);
+function Statistics({ recordings }) {
+  const numRecordings = recordings.length;
+  const solutions = recordings.filter((rec) => rec.fixed === true).length;
+  const occupation = solutions / numRecordings;
 
   return (
     <>
       <Stat
-        title="Bookings"
-        color="blue"
-        icon={<FaPersonWalkingLuggage />}
-        value={numBookings}
-      />
-      <Stat
-        title="Sales"
-        color="green"
-        icon={<FaMoneyBill />}
-        value={formatCurrency(sales)}
-      />
-      <Stat
-        title="Check ins"
+        title="Services"
         color="indigo"
-        icon={<FaCalendarCheck />}
-        value={checkins}
+        icon={<FaTools />}
+        value={numRecordings}
       />
       <Stat
-        title="Occupancy rate"
+        title="Solutions"
+        color="green"
+        icon={<FaCheckToSlot />}
+        value={solutions}
+      />
+      <Stat
+        title="Fixed rate"
         color="yellow"
         icon={<FaChartSimple />}
         value={Math.round(occupation * 100) + "%"}

@@ -31,6 +31,7 @@ function CheckinBooking() {
   const { checkin, isCheckingIn } = useCheckin();
   const { checkout, isCheckingOut } = useCheckout();
   const { settings, isLoading: isLoadingSettings } = useSettings();
+  // const { editRoom, isEditing } = useEditCabin();
 
   if (isLoading || isLoadingSettings) return <Spinner />;
 
@@ -53,8 +54,8 @@ function CheckinBooking() {
     if (status === "scheduled") checkin({ recordingId });
     //check out
     if (status === "in-progress") {
-      console.log("check out!!");
       checkout({ recordingId, confirmFixed });
+      // editRoom({ {...rooms, ${repairing} : true } ,id: room_id });
     }
   }
 
