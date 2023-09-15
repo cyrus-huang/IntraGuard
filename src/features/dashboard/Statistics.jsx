@@ -5,7 +5,7 @@ import { FaChartSimple, FaCheckToSlot } from "react-icons/fa6";
 function Statistics({ recordings }) {
   const numRecordings = recordings.length;
   const solutions = recordings.filter((rec) => rec.fixed === true).length;
-  const occupation = solutions / numRecordings;
+  const occupation = numRecordings === 0 ? 0 : solutions / numRecordings;
 
   return (
     <>

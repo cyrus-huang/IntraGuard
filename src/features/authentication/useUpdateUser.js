@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createEditRoom } from "../../services/apiCabins";
 import { toast } from "react-hot-toast";
 import { updateCurrentUser } from "../../services/apiAuth";
 

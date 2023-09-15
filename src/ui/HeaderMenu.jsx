@@ -8,6 +8,7 @@ import DarkModeSwitch from "./DarkModeSwitch";
 const HeaderMenuStyle = styled.ul`
   display: flex;
   gap: 0.4rem;
+  padding: 1.2rem 2.4rem;
 `;
 
 function HeaderMenu() {

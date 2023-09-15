@@ -1,12 +1,12 @@
 import styled from "styled-components";
+import CreateRoomForm from "./CreateRoomForm";
+import { useDeleteRoom } from "./useDeleteRoom";
 import { FaCopy, FaPen, FaTrash } from "react-icons/fa6";
+import { useCreateRoom } from "./useCreateRoom";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
-import CreatePersonForm from "./CreatePersonForm";
-import { useDeletePerson } from "./useDeletePerson";
-import { useCreatePerson } from "./useCreatePerson";
 
 // const TableRow = styled.div`
 //   display: grid;
@@ -47,35 +47,56 @@ const Room = styled.div`
 //   color: var(--color-green-700);
 // `;
 
-function PersonnelRow({ person }) {
-  const { id: person_id, name, pid, phone, photo, available } = person;
+function RoomRow({ room }) {
+  const {
+    id: room_id,
+    name,
+    air_condition,
+    electricity,
+    fire_control,
+    environment,
+    security,
+    wiring,
+    ups,
+    running,
+    overall,
+    image,
+    priority,
+  } = room;
 
-  const { isDeleting, deletePerson } = useDeletePerson();
-  const { createPerson, isCreating } = useCreatePerson();
+  const { isDeleting, deleteRoom } = useDeleteRoom();
+  const { isCreating, createRoom } = useCreateRoom();
 
   function handleDuplicate() {
-    createPerson({
+    createRoom({
       name: `Copy of ${name}`,
-      pid,
-      phone,
-      photo,
-      available,
+      air_condition,
+      electricity,
+      fire_control,
+      environment,
+      security,
+      wiring,
+      ups,
+      running,
+      overall,
+      image,
+      priority,
     });
   }
   return (
     <>
       <Table.Row>
-        <Img src={photo} />
+        <Img src={image} />
         <Room>{name}</Room>
-        <div>{pid}</div>
-        <div>{phone}</div>
-        <div>{available ? "Available now" : "Not available"}</div>
+        <div>{running ? "Computers Running" : "Not Running"}</div>
+        <div>{overall ? "Facilities operating" : "Needs repairing"}</div>
+        <div>{priority}</div>
         <div>
           <Modal>
             <Menus.Menu>
-              <Menus.Toggle id={person_id} />
+              <Menus.Toggle id={room_id} />
 
-              <Menus.List id={person_id}>
+              <Menus.List id={room_id}>
                 <Menus.Button
                   icon={<FaCopy />}
                   onClick={handleDuplicate}
@@ -94,14 +115,14 @@ function PersonnelRow({ person }) {
               </Menus.List>
 
               <Modal.Window name="edit">
-                <CreatePersonForm personToEdit={person} />
+                <CreateRoomForm roomToEdit={room} />
               </Modal.Window>
 
               <Modal.Window name="delete">
                 <ConfirmDelete
-                  resourceName="personnel"
+                  resourceName="rooms"
                   disabled={isDeleting}
-                  onConfirm={() => deletePerson(person_id)}
+                  onConfirm={() => deleteRoom(room_id)}
                 />
               </Modal.Window>
             </Menus.Menu>
@@ -112,4 +133,4 @@ function PersonnelRow({ person }) {
   );
 }
 
-export default PersonnelRow;
+export default RoomRow;

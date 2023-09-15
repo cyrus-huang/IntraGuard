@@ -3,7 +3,6 @@ import styled from "styled-components";
 import {
   FaHouseChimney,
   FaRegCalendarCheck,
-  FaGear,
   FaBuildingColumns,
   FaChalkboardUser,
   FaIdCardClip,
@@ -11,8 +10,13 @@ import {
 
 const NavList = styled.ul`
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  flex-direction: row;
+  gap: 0.4rem;
+`;
+
+const NavLi = styled.li`
+  display: flex;
+  flex-direction: row;
 `;
 
 const Link = styled(NavLink)`
@@ -25,7 +29,7 @@ const Link = styled(NavLink)`
     color: var(--color-grey-600);
     font-size: 1.6rem;
     font-weight: 500;
-    padding: 1.2rem 2.4rem;
+    padding: 1.2rem 3.6rem;
     transition: all 0.3s;
   }
 
@@ -58,7 +62,7 @@ function MainNav() {
   return (
     <nav>
       <NavList>
-        <li>
+        <NavLi>
           <Link to="/dashboard">
             <FaHouseChimney />
             <span>Home</span>
@@ -83,7 +87,7 @@ function MainNav() {
             <FaChalkboardUser />
             <span>Users</span>
           </Link>
-        </li>
+        </NavLi>
       </NavList>
     </nav>
   );

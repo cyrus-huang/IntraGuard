@@ -1,15 +1,15 @@
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
-import RecordingTable from "../features/bookings/RecordingTable";
-import BookingTableOperations from "../features/bookings/BookingTableOperations";
-import AddRecording from "../features/bookings/AddRecording";
+import RecordingTable from "../features/recordings/RecordingTable";
+import RecordingTableOperations from "../features/recordings/RecordingTableOperations";
+import AddRecording from "../features/recordings/AddRecording";
 
 function Recordings() {
   return (
     <>
       <Row type="hori">
         <Heading as="h1">All recordings</Heading>
-        <BookingTableOperations />
+        <RecordingTableOperations />
       </Row>
 
       <Row>

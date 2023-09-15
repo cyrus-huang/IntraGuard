@@ -21,7 +21,6 @@ export const getToday = function (options = {}) {
     // Set to the last second of the day
     today.setUTCHours(23, 59, 59, 999);
   else today.setUTCHours(0, 0, 0, 0);
-  console.log(today.toISOString());
   return today.toISOString();
 };
 
@@ -35,7 +34,6 @@ export const getTomorrow = function (options = {}) {
     // Set to the last second of the day
     tomorrow.setUTCHours(23, 59, 59, 999);
   else tomorrow.setUTCHours(0, 0, 0, 0);
-  console.log(tomorrow.toISOString());
   return tomorrow.toISOString();
 };
 

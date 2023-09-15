@@ -20,7 +20,7 @@ async function deleteGuests() {
   if (error) console.log(error.message);
 }
 
-async function deleteCabins() {
+async function deleteRooms() {
   const { error } = await supabase.from("cabins").delete().gt("id", 0);
   if (error) console.log(error.message);
 }
@@ -35,7 +35,7 @@ async function createGuests() {
   if (error) console.log(error.message);
 }
 
-async function createCabins() {
+async function createRooms() {
   const { error } = await supabase.from("cabins").insert(cabins);
   if (error) console.log(error.message);
 }
@@ -108,11 +108,11 @@ function Uploader() {
     // Bookings need to be deleted FIRST
     await deleteBookings();
     await deleteGuests();
-    await deleteCabins();
+    await deleteRooms();
 
     // Bookings need to be created LAST
     await createGuests();
-    await createCabins();
+    await createRooms();
     await createBookings();
 
     setIsLoading(false);

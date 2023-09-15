@@ -2,11 +2,9 @@ import styled from "styled-components";
 import { useRecentRecordings } from "./useRecentRecordings";
 import Spinner from "../../ui/Spinner";
 import Statistics from "./Statistics";
-import { useRooms } from "../cabins/useRooms";
 import SalesChart from "./SalesChart";
 import DurationChart from "./DurationChart";
 import TodayActivity from "../check-in-out/TodayActivity";
-import { useSearchParams } from "react-router-dom";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -24,11 +22,11 @@ const StyledDataLayout = styled.div`
 function DashboardLayout() {
   const {
     recordings,
-    isLoading: isLoadingBookings,
+    isLoading: isLoadingRecordings,
     numDays,
   } = useRecentRecordings();
 
-  if (isLoadingBookings) return <Spinner />;
+  if (isLoadingRecordings) return <Spinner />;
 
   return (
     <>

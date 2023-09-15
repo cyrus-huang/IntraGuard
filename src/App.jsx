@@ -4,14 +4,14 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import GlobalStyles from "./styles/GlobalStyles";
 import Dashboard from "./pages/Dashboard";
-import Cabins from "./pages/Cabins";
+import Rooms from "./pages/Rooms";
 import Users from "./pages/Users";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import AppLayout from "./ui/AppLayout";
 import { Toaster } from "react-hot-toast";
-import BookingDetail from "./pages/BookingDetail";
+import RecordingDetail from "./pages/RecordingDetail";
 import Checkin from "./pages/Checkin";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
@@ -46,10 +46,10 @@ function App() {
               <Route path="recordings" element={<Recordings />} />
               <Route
                 path="recordings/:recordingId"
-                element={<BookingDetail />}
+                element={<RecordingDetail />}
               />
               <Route path="register/:recordingId" element={<Checkin />} />
-              <Route path="rooms" element={<Cabins />} />
+              <Route path="rooms" element={<Rooms />} />
               <Route path="personnel" element={<Personnel />} />
               <Route path="users" element={<Users />} />
               <Route path="account" element={<Account />} />

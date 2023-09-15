@@ -23,37 +23,37 @@ const StyledSalesChart = styled(DashboardBox)`
   }
 `;
 
-const fakeData = [
-  { label: "Jan 09", totalIssues: 480, fixedIssues: 20 },
-  { label: "Jan 10", totalIssues: 580, fixedIssues: 100 },
-  { label: "Jan 11", totalIssues: 550, fixedIssues: 150 },
-  { label: "Jan 12", totalIssues: 600, fixedIssues: 50 },
-  { label: "Jan 13", totalIssues: 700, fixedIssues: 150 },
-  { label: "Jan 14", totalIssues: 800, fixedIssues: 150 },
-  { label: "Jan 15", totalIssues: 700, fixedIssues: 200 },
-  { label: "Jan 16", totalIssues: 650, fixedIssues: 200 },
-  { label: "Jan 17", totalIssues: 600, fixedIssues: 300 },
-  { label: "Jan 18", totalIssues: 550, fixedIssues: 100 },
-  { label: "Jan 19", totalIssues: 700, fixedIssues: 100 },
-  { label: "Jan 20", totalIssues: 800, fixedIssues: 200 },
-  { label: "Jan 21", totalIssues: 700, fixedIssues: 100 },
-  { label: "Jan 22", totalIssues: 810, fixedIssues: 50 },
-  { label: "Jan 23", totalIssues: 950, fixedIssues: 250 },
-  { label: "Jan 24", totalIssues: 970, fixedIssues: 100 },
-  { label: "Jan 25", totalIssues: 900, fixedIssues: 200 },
-  { label: "Jan 26", totalIssues: 950, fixedIssues: 300 },
-  { label: "Jan 27", totalIssues: 850, fixedIssues: 200 },
-  { label: "Jan 28", totalIssues: 900, fixedIssues: 100 },
-  { label: "Jan 29", totalIssues: 800, fixedIssues: 300 },
-  { label: "Jan 30", totalIssues: 950, fixedIssues: 200 },
-  { label: "Jan 31", totalIssues: 1100, fixedIssues: 300 },
-  { label: "Feb 01", totalIssues: 1200, fixedIssues: 400 },
-  { label: "Feb 02", totalIssues: 1250, fixedIssues: 300 },
-  { label: "Feb 03", totalIssues: 1400, fixedIssues: 450 },
-  { label: "Feb 04", totalIssues: 1500, fixedIssues: 500 },
-  { label: "Feb 05", totalIssues: 1400, fixedIssues: 600 },
-  { label: "Feb 06", totalIssues: 1450, fixedIssues: 400 },
-];
+// const fakeData = [
+//   { label: "Jan 09", totalIssues: 480, fixedIssues: 20 },
+//   { label: "Jan 10", totalIssues: 580, fixedIssues: 100 },
+//   { label: "Jan 11", totalIssues: 550, fixedIssues: 150 },
+//   { label: "Jan 12", totalIssues: 600, fixedIssues: 50 },
+//   { label: "Jan 13", totalIssues: 700, fixedIssues: 150 },
+//   { label: "Jan 14", totalIssues: 800, fixedIssues: 150 },
+//   { label: "Jan 15", totalIssues: 700, fixedIssues: 200 },
+//   { label: "Jan 16", totalIssues: 650, fixedIssues: 200 },
+//   { label: "Jan 17", totalIssues: 600, fixedIssues: 300 },
+//   { label: "Jan 18", totalIssues: 550, fixedIssues: 100 },
+//   { label: "Jan 19", totalIssues: 700, fixedIssues: 100 },
+//   { label: "Jan 20", totalIssues: 800, fixedIssues: 200 },
+//   { label: "Jan 21", totalIssues: 700, fixedIssues: 100 },
+//   { label: "Jan 22", totalIssues: 810, fixedIssues: 50 },
+//   { label: "Jan 23", totalIssues: 950, fixedIssues: 250 },
+//   { label: "Jan 24", totalIssues: 970, fixedIssues: 100 },
+//   { label: "Jan 25", totalIssues: 900, fixedIssues: 200 },
+//   { label: "Jan 26", totalIssues: 950, fixedIssues: 300 },
+//   { label: "Jan 27", totalIssues: 850, fixedIssues: 200 },
+//   { label: "Jan 28", totalIssues: 900, fixedIssues: 100 },
+//   { label: "Jan 29", totalIssues: 800, fixedIssues: 300 },
+//   { label: "Jan 30", totalIssues: 950, fixedIssues: 200 },
+//   { label: "Jan 31", totalIssues: 1100, fixedIssues: 300 },
+//   { label: "Feb 01", totalIssues: 1200, fixedIssues: 400 },
+//   { label: "Feb 02", totalIssues: 1250, fixedIssues: 300 },
+//   { label: "Feb 03", totalIssues: 1400, fixedIssues: 450 },
+//   { label: "Feb 04", totalIssues: 1500, fixedIssues: 500 },
+//   { label: "Feb 05", totalIssues: 1400, fixedIssues: 600 },
+//   { label: "Feb 06", totalIssues: 1450, fixedIssues: 400 },
+// ];
 
 function SalesChart({ recordings, numDays }) {
   const { isDark } = useDarkMode();
@@ -73,7 +73,6 @@ function SalesChart({ recordings, numDays }) {
         .reduce((acc, cur) => acc + (cur.fixed ? 1 : 0), 0),
     };
   });
-  console.log(data);
 
   const colors = isDark
     ? {

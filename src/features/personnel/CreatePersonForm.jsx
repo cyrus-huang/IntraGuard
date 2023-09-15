@@ -11,7 +11,7 @@ import { useEditPerson } from "./useEditPerson";
 function CreatePersonForm({ personToEdit = {}, onClose }) {
   const { id: oldId, ...oldValues } = personToEdit;
   const isEdit = Boolean(oldId);
-  const { register, handleSubmit, reset, getValues, formState } = useForm({
+  const { register, handleSubmit, reset, formState } = useForm({
     defaultValues: isEdit ? oldValues : {},
   });
   const { errors } = formState;

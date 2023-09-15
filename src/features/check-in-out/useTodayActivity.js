@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTodayActivity } from "../../services/apiBookings";
+import { getTodayActivity } from "../../services/apiRecordings";
 
 export function useTodayActivity() {
   const { isLoading, data: activity } = useQuery({

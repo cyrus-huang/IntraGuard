@@ -2,11 +2,14 @@ import styled from "styled-components";
 import { useDarkMode } from "../context/DarkModeContext";
 
 const StyledLogo = styled.div`
+  display: flex;
   text-align: center;
+  justify-content: center;
+  padding-right: 4.6rem;
 `;
 
 const Img = styled.img`
-  height: 9.6rem;
+  height: 6rem;
   width: auto;
 `;
 

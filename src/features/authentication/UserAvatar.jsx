@@ -3,6 +3,7 @@ import { useUser } from "./useUser";
 
 const StyledUserAvatar = styled.div`
   display: flex;
+  padding: 1.2rem 3.6rem;
   gap: 1.2rem;
   align-items: center;
   font-weight: 500;
